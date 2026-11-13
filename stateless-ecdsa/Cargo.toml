@@ -6,6 +6,7 @@
 resolver = "2"
 members = [
     "crates/eez-prover-evm",
+    "crates/eez-prover-stateless",
 ]
 
 [workspace.package]
