@@ -1662,7 +1662,7 @@ dependencies = [
 [[package]]
 name = "eez-blob"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-consensus",
  "alloy-eips",
@@ -1673,7 +1673,7 @@ dependencies = [
 [[package]]
 name = "eez-control-rpc"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "prost",
  "protoc-bin-vendored",
@@ -1685,7 +1685,7 @@ dependencies = [
 [[package]]
 name = "eez-payload-codec"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "thiserror",
  "tracing",
@@ -1694,7 +1694,7 @@ dependencies = [
 [[package]]
 name = "eez-primitives"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-consensus",
  "alloy-eips",
@@ -1714,7 +1714,7 @@ dependencies = [
 [[package]]
 name = "eez-proof-signer"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-consensus",
  "alloy-eips",
@@ -1743,7 +1743,7 @@ dependencies = [
 [[package]]
 name = "eez-protocol"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-consensus",
  "alloy-eips",
@@ -1763,7 +1763,7 @@ dependencies = [
 [[package]]
 name = "eez-prover"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-primitives",
  "alloy-rpc-types-debug",
@@ -1775,7 +1775,7 @@ dependencies = [
 [[package]]
 name = "eez-prover-client"
 version = "0.1.0"
-source = "git+https://github.com/eez-association/eez-rollup0?rev=1d9420e74d7bb78ae25a310c0cf60c184c0ef986#1d9420e74d7bb78ae25a310c0cf60c184c0ef986"
+source = "git+https://github.com/eez-association/eez-rollup0?rev=f0767f03ff040ba8cca7752e6548250201e7986a#f0767f03ff040ba8cca7752e6548250201e7986a"
 dependencies = [
  "alloy-primitives",
  "alloy-sol-types",
