@@ -1,0 +1,217 @@
+# The stateless ECDSA proof signer: re-executes each settlement window from
+# witnesses on reth v2.7.0, revm 43 and the stateless fork, then signs it.
+# The protocol crates it shares with the node come from eez-rollup0 at a pinned
+# commit. See README.md.
+[workspace]
+resolver = "2"
+members = [
+    "crates/eez-prover-evm",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.95"
+
+[workspace.dependencies]
+# Protocol crates shared with the node, from eez-rollup0. They inherit their
+# own dependency requirements from eez-rollup0's root manifest and name no
+# git-pinned reth or EVM crate. Bump all of them together.
+eez-control-rpc   = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+eez-payload-codec = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+eez-primitives    = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986", features = ["revm"] }
+eez-proof-signer  = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+eez-protocol      = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+eez-prover        = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+eez-prover-client = { git = "https://github.com/eez-association/eez-rollup0", rev = "1d9420e74d7bb78ae25a310c0cf60c184c0ef986" }
+
+# The EVM the signer runs.
+eez-prover-evm = { path = "crates/eez-prover-evm" }
+
+# Stateless execution on reth v2.7.0. Branch
+# feat/reth-v2.7-candidate-block-hashes: the reth-v2.7 trie port plus our
+# candidate block hashes and empty-prefix checkpoint.
+stateless-reth = { package = "stateless", git = "https://github.com/eez-association/stateless", rev = "935f25aa0c28c36c3c169e36e36b823206c5a856" }
+
+# reth v2.7.0, pinned by `tag` like stateless; see the [patch] below.
+reth-chainspec           = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-ethereum-primitives = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-evm                 = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-evm-ethereum        = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-storage-errors      = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-trie-common         = { git = "https://github.com/paradigmxyz/reth", tag = "v2.7.0" }
+reth-primitives-traits   = { version = "0.8.1", default-features = false }
+
+# revm 43 + alloy-evm 0.39, the EVM reth v2.7.0 runs.
+revm      = { version = "43", default-features = false, features = [
+    "optional_balance_check",
+    "optional_block_gas_limit",
+    "optional_eip3607",
+    "optional_no_base_fee",
+] }
+alloy-evm = { version = "=0.39.0" }
+
+alloy-consensus        = { version = "=2.5.0", default-features = false }
+alloy-eips             = { version = "=2.5.0", default-features = false }
+alloy-genesis          = { version = "=2.5.0", default-features = false }
+alloy-primitives       = { version = "1", default-features = false }
+alloy-rlp              = { version = "0.3", features = ["derive"] }
+alloy-rpc-types-debug  = { version = "=2.5.0", default-features = false }
+alloy-rpc-types-engine = { version = "2", default-features = false }
+alloy-signer           = { version = "2", default-features = false }
+alloy-signer-local     = { version = "2", default-features = false }
+alloy-trie             = { version = "0.9", default-features = false }
+alloy-sol-types        = { version = "1", default-features = false }
+
+async-trait        = "0.1"
+clap               = { version = "4", features = ["derive"] }
+eyre               = "0.6"
+hex                = "0.4"
+lru                = "0.16.4"
+prost              = "0.14"
+serde              = { version = "1", features = ["derive"] }
+serde_json         = "1"
+tokio              = { version = "1", features = ["full"] }
+tokio-stream       = "0.1"
+tonic              = "0.14"
+tracing            = "0.1"
+tracing-subscriber = "0.3"
+
+# reth main at the merge of paradigmxyz/reth#27622 (fa9e76a), via the
+# debjit-bw/reth fork because a patch cannot point back at its own source. Every
+# reth crate is redirected, including those stateless pulls by tag, so the graph
+# keeps one reth source.
+[patch."https://github.com/paradigmxyz/reth"]
+reth-chainspec                  = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-consensus                  = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-consensus-common           = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-db-models                  = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-ethereum-consensus         = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-ethereum-forks             = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-ethereum-primitives        = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-evm                        = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-evm-ethereum               = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-execution-errors           = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-execution-types            = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-network-peers              = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-prune-types                = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-stages-types               = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-static-file-types          = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-storage-api                = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-storage-errors             = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-trie-common                = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+reth-trie-sparse                = { git = "https://github.com/debjit-bw/reth", rev = "fa9e76ab4fd69d8323c3bbbbe43470f64aa47cb7" }
+
+# Profiles copied from reth (paradigmxyz/reth Cargo.toml), minus its
+# hivetests/reproducible CI profiles. `release` is the fast-to-build
+# default (the Docker images use it); `maxperf` is reth's
+# production-release profile when top runtime speed is worth the
+# build time; `profiling` keeps symbols for perf tooling.
+[profile.dev]
+# https://davidlattimore.github.io/posts/2024/02/04/speeding-up-the-rust-edit-build-run-cycle.html
+debug = "line-tables-only"
+split-debuginfo = "unpacked"
+# Not in reth: this workspace predates the copy and keeps opt-level 1
+# so a dev-built node stays usable for local runs.
+opt-level = 1
+
+# Speed up tests.
+[profile.dev.package]
+proptest.opt-level = 3
+rand_chacha.opt-level = 3
+rand_xorshift.opt-level = 3
+unarray.opt-level = 3
+
+[profile.ci-e2e]
+inherits = "dev"
+debug = "none"
+split-debuginfo = "off"
+incremental = false
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+debug = "none"
+strip = "symbols"
+panic = "unwind"
+codegen-units = 16
+
+# Use the `--profile profiling` flag to show symbols in release mode.
+# e.g. `cargo build --profile profiling`
+[profile.profiling]
+inherits = "release"
+debug = "full"
+strip = "none"
+
+# Include debug info in benchmarks too.
+[profile.bench]
+inherits = "profiling"
+
+[profile.maxperf]
+inherits = "release"
+lto = "fat"
+codegen-units = 1
+
+[profile.maxperf-symbols]
+inherits = "maxperf"
+debug = "full"
+strip = "none"
+
+[workspace.lints.rust]
+ambiguous_negative_literals  = "warn"
+missing_debug_implementations = "warn"
+redundant_imports             = "warn"
+redundant_lifetimes           = "warn"
+trivial_numeric_casts         = "warn"
+unsafe_op_in_unsafe_fn        = "warn"
+unused_lifetimes              = "warn"
+
+[workspace.lints.clippy]
+correctness = { level = "warn", priority = -1 }
+suspicious  = { level = "warn", priority = -1 }
+perf        = { level = "warn", priority = -1 }
+style       = { level = "warn", priority = -1 }
+complexity  = { level = "warn", priority = -1 }
+pedantic    = { level = "warn", priority = -1 }
+
+# Permit the structured-logging macro format used by tracing::event! per M-LOG-STRUCTURED.
+literal_string_with_formatting_args = "allow"
+
+# Pragmatic opt-outs for pedantic rules that don't fit the reth-integration / protocol-port style.
+# Mirrors the source workspace (rollup-node) so ported crates compile under the same posture they
+# were written for — adding these later, per-file, would be noise.
+module_name_repetitions          = "allow"
+must_use_candidate               = "allow"
+missing_panics_doc               = "allow"
+missing_errors_doc               = "allow"
+similar_names                    = "allow"
+cast_possible_truncation         = "allow"
+too_many_lines                   = "allow"
+default_trait_access             = "allow"
+missing_fields_in_debug          = "allow"
+renamed_function_params          = "allow"
+doc_markdown                     = "allow"
+doc_lazy_continuation            = "allow"
+ignored_unit_patterns            = "allow"
+implicit_hasher                  = "allow"
+items_after_statements           = "allow"
+unreadable_literal               = "allow"
+semicolon_if_nothing_returned    = "allow"
+many_single_char_names           = "allow"
+assigning_clones                 = "allow"
+match_wildcard_for_single_variants = "allow"
+used_underscore_items            = "allow"
+unused_self                      = "allow"
+needless_pass_by_value           = "allow"
+if_then_some_else_none           = "allow"
+type_complexity                  = "allow"
+match_single_binding             = "allow"
+single_match_else                = "allow"
+map_unwrap_or                    = "allow"
+clone_on_ref_ptr                 = "allow"
+# New in clippy 1.99; `assert!(v.is_empty())` reads better in tests than `[] as [T; 0]`.
+assert_is_empty                  = "allow"
+# constructors (Deriver::new wires 9 deps) need these params;
+# a refactor or dediacted crates would reduce some of this
+too_many_arguments               = "allow"

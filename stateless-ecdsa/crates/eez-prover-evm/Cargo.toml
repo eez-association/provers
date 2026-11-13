@@ -1,0 +1,34 @@
+[package]
+name = "eez-prover-evm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "The EEZ EVM the stateless proof signer runs, kept in step with eez-rollup0's crates/eez-evm."
+
+[dependencies]
+eez-primitives.workspace = true
+alloy-consensus.workspace = true
+alloy-eips.workspace = true
+alloy-genesis.workspace = true
+alloy-evm.workspace = true
+alloy-primitives.workspace = true
+alloy-rpc-types-engine.workspace = true
+reth-chainspec.workspace = true
+reth-evm.workspace = true
+reth-evm-ethereum.workspace = true
+reth-primitives-traits.workspace = true
+reth-storage-errors.workspace = true
+revm.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+# Golden fixtures: replay and recording (tests/golden.rs).
+alloy-rlp.workspace = true
+alloy-signer.workspace = true
+alloy-signer-local.workspace = true
+alloy-trie = { workspace = true, features = ["ethereum"] }
+serde.workspace = true
+
+[lints]
+workspace = true
