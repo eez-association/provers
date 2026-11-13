@@ -1,0 +1,30 @@
+# cargo-audit policy for the `Dependency Audit` CI job.
+#
+# cargo-audit does not read deny.toml; an ID accepted here usually belongs
+# there too.
+
+[advisories]
+ignore = [
+    # zstd 0.13 / zstd-safe 7 / zstd-sys 2.0. The fixes need zstd 0.14 and
+    # zstd-safe 8; reth still requires zstd 0.13.
+    # Context reuse through `with_context`, which no dependency calls.
+    "RUSTSEC-2026-0391",
+    # `Seekable::decompress`, behind the `seekable` feature, which nothing enables.
+    "RUSTSEC-2026-0398",
+    # A failed legacy-frame stream decode into a `Vec`. The signer decompresses
+    # no untrusted zstd input.
+    "RUSTSEC-2026-0403",
+    # The wasm32 allocator shim; we don't build for wasm32.
+    "RUSTSEC-2026-0410",
+    # crypto-bigint 0.5 timing variability in constant-time ops. Reachable: the
+    # attestation key signs through alloy's k256 0.13, whose scalar add/sub use
+    # it. The fix (>= 0.7.6) needs k256/p256 0.14, which alloy and revm don't
+    # use yet.
+    "RUSTSEC-2026-0387",
+]
+
+[output]
+quiet = false
+# Unmaintained/unsound advisories stay visible in the job log without failing
+# it; deny.toml's `unmaintained = "workspace"` is the gate for the ones we own.
+deny = []
