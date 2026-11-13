@@ -4,7 +4,7 @@
 //! post-state root, receipts root, logs bloom and gas used of every block (or
 //! that the block is invalid). Every EEZ EVM replays the same blocks and must
 //! reproduce every value exactly: this crate and eez-rollup0's `crates/eez-evm`,
-//! which replays a copy of this file.
+//! which reads this file through its `provers/` submodule.
 //!
 //! This crate records them (revm):
 //! `cargo test -p eez-prover-evm --test golden -- --ignored regenerate`.

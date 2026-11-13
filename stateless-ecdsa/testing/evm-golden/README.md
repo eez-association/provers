@@ -6,8 +6,8 @@ each block either `invalid` or its post-state root, receipts root, logs bloom
 and gas used.
 
 Every EEZ EVM replays them and must reproduce every value exactly: this crate,
-and eez-rollup0's node EVM (`crates/eez-evm`), which replays a byte-identical
-copy in its `testing/evm-golden/`. Update both copies together.
+and eez-rollup0's node EVM (`crates/eez-evm`), which reads this file through its
+`provers/` submodule.
 
 ```bash
 cargo test -p eez-prover-evm --test golden

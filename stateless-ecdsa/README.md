@@ -38,6 +38,10 @@ commit: `eez-primitives`, `eez-protocol`, `eez-proof-signer`,
   requirements from eez-rollup0's root manifest.
 - `eez-primitives` keeps the revm `TxEnv` conversions behind its `revm` feature,
   which this workspace enables.
+- eez-rollup0 pins this repository as its `provers/` submodule and builds and
+  tests this workspace against its own checkout of those crates
+  (`scripts/provers-cargo.sh`), so a change to them is tested with the signer
+  before this pin moves.
 - To move to a newer eez-rollup0, change every `rev` together, then run
   `cargo check` without `--locked` to update `Cargo.lock`.
 
@@ -47,7 +51,8 @@ commit: `eez-primitives`, `eez-protocol`, `eez-proof-signer`,
   collector, the block executor) lands in eez-rollup0's `crates/eez-evm` and in
   `crates/eez-prover-evm` together.
 - Both EVMs replay `testing/evm-golden/execution.json` and must match it
-  exactly. eez-rollup0 keeps a byte-identical copy; only this workspace records.
+  exactly; eez-rollup0 reads it through its `provers/` submodule. Only this
+  workspace records it.
 - `crates/eez-prover-stateless/tests/conformance/` holds copies of eez-rollup0's
   `prove.v2` conformance vectors and replayer
   (`crates/eez-control-rpc/conformance/`), replayed against the real binary.
