@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - "stateless-ecdsa/**"
+      - "scripts/check-execution-deps.py"
       - ".github/workflows/stateless-ecdsa.yml"
   pull_request:
     branches: [main]
     paths:
       - "stateless-ecdsa/**"
+      - "scripts/check-execution-deps.py"
       - ".github/workflows/stateless-ecdsa.yml"
   workflow_dispatch:
 
@@ -50,6 +52,8 @@ jobs:
           sudo apt-get install -y libclang-dev pkg-config libssl-dev cmake
       - name: Format
         run: cargo fmt --all --check
+      - name: Check execution dependencies
+        run: cargo metadata --locked --format-version 1 | python3 ../scripts/check-execution-deps.py stateless
       - name: Clippy
         run: cargo clippy --locked --workspace --all-targets -- -D warnings
 
