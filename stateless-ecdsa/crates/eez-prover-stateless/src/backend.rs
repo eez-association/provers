@@ -138,7 +138,7 @@ impl Backend {
 
     fn from_genesis(genesis: Genesis, expected_l2_system_address: Address) -> eyre::Result<Self> {
         let chain_spec = Arc::new(ChainSpec::from_genesis(genesis));
-        let evm_config = EezEvmConfig::new(Arc::clone(&chain_spec))?;
+        let evm_config = EezEvmConfig::new_l2(Arc::clone(&chain_spec))?;
         Ok(Self {
             chain_spec,
             evm_config,
@@ -164,7 +164,7 @@ impl Backend {
         let block = decode_match_and_recover_signers(admitted, &self.chain_spec)?;
         let number = block.header().number;
         let (plan, system_sender_flags) =
-            CheckpointPlan::for_block(&block, self.expected_l2_system_address);
+            CheckpointPlan::for_block(&block, self.expected_l2_system_address)?;
         // Checkpoints are determined by block contents, independently of which
         // range a later Finalize selects. Ordinary blocks use normal execution.
         let (output, checkpoints) = if plan.positions().is_empty() {
@@ -223,6 +223,7 @@ impl Backend {
             transaction_state_checkpoints: checkpoints,
             post_state_root,
             settlement_evidence: SettlementBlockEvidence {
+                cumulative_gas_used: receipts.iter().map(|r| r.cumulative_gas_used).collect(),
                 system_sender_flags,
                 observed_outbound_events: observe_outbound_events(&receipts),
             },

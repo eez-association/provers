@@ -5,7 +5,7 @@
 //! both, and both replay the golden fixtures in `testing/evm-golden/`.
 //!
 //! The pinned `EthEvmConfig` fixes its primitives to Ethereum types, which cannot
-//! represent native type `0x76`. This wrapper selects `EezPrimitives`, preserves
+//! represent native type `0x45`. This wrapper selects `EezPrimitives`, preserves
 //! the native receipt type, and decodes native transactions in Engine payloads.
 //! Ethereum transaction execution, gas accounting, block assembly, and header
 //! environment are reused. L2 block processing keeps EIP-2935 but disables
@@ -118,7 +118,7 @@ impl ReceiptBuilder for EezReceiptBuilder {
     type Transaction = EezTxEnvelope;
     type Receipt = Receipt;
 
-    /// Preserve native type `0x76` in the receipt root; Ethereum's receipt builder
+    /// Preserve native type `0x45` in the receipt root; Ethereum's receipt builder
     /// only accepts its own type enum. Status, gas, and logs are unchanged.
     fn build_receipt<E: Evm>(&self, ctx: ReceiptBuilderCtx<'_, EezTxType, E>) -> Receipt {
         Receipt {
@@ -146,6 +146,13 @@ impl<C: EthChainSpec> EezEvmConfig<C> {
                 ethereum: EthBlockExecutorFactory::new(EezReceiptBuilder, chain_spec, factory),
             },
         })
+    }
+
+    /// Construct an L2 configuration, refusing unsupported fork schedules.
+    pub fn new_l2(chain_spec: Arc<C>) -> Result<Self, AnyError> {
+        eez_primitives::ensure_supported_l2_forks(&chain_spec.genesis().config)
+            .map_err(|error| AnyError::new(std::io::Error::other(error)))?;
+        Self::new(chain_spec)
     }
 
     pub fn chain_spec(&self) -> &Arc<C> {

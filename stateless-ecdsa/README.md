@@ -47,7 +47,7 @@ commit: `eez-primitives`, `eez-protocol`, `eez-proof-signer`,
 
 ## Keeping in step with the node
 
-- A change to the EEZ execution rules (0x76 native transactions, the fee
+- A change to the EEZ execution rules (0x45 native transactions, the fee
   collector, the block executor) lands in eez-rollup0's `crates/eez-evm` and in
   `crates/eez-prover-evm` together.
 - Both EVMs replay `testing/evm-golden/execution.json` and must match it

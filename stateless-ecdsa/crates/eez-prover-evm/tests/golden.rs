@@ -256,13 +256,14 @@ fn block(genesis: &Genesis, number: u64, base_fee: u64, txs: Vec<EezTxEnvelope>)
     alloy_rlp::encode(Block::new(header, body)).into()
 }
 
-fn system(chain_id: u64, nonce: u64, value: u64) -> EezTxEnvelope {
+fn system(chain_id: u64, group: u64, value: u64) -> EezTxEnvelope {
     SystemTransaction {
         chain_id,
-        nonce,
+        source_hash: keccak256(group.to_be_bytes()),
+        gas_limit: eez_primitives::SYSTEM_TX_GAS_CAP,
         to: EEZL2_ADDRESS,
         value: U256::from(value),
-        input: Bytes::new(),
+        input: Bytes::from_static(&eez_primitives::EXECUTE_INCOMING_SELECTOR),
     }
     .into()
 }
@@ -431,15 +432,15 @@ fn scenarios() -> Vec<(Scenario, Vec<bool>)> {
         1,
         7,
         vec![
-            system(chain, 0, 1),
             call(chain, &alice, 0, TxKind::Call(STORE_LOG)),
-            system(chain, 1, 2),
             call(chain, &alice, 1, TxKind::Call(REVERTER)),
             call(chain, &bob, 0, TxKind::Call(STORE_LOG)),
+            system(chain, 0, 1),
+            system(chain, 1, 2),
         ],
     )];
     push(
-        "nonce_chain_mixes_system_and_user_transactions",
+        "ordinary_nonce_chain_precedes_native_deliveries",
         g,
         blocks,
         vec![true],

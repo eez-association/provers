@@ -19,13 +19,13 @@ rust-version = "1.95"
 # Protocol crates shared with the node, from eez-rollup0. They inherit their
 # own dependency requirements from eez-rollup0's root manifest and name no
 # git-pinned reth or EVM crate. Bump all of them together.
-eez-control-rpc   = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
-eez-payload-codec = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
-eez-primitives    = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98", features = ["revm"] }
-eez-proof-signer  = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
-eez-protocol      = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
-eez-prover        = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
-eez-prover-client = { git = "https://github.com/eez-association/eez-rollup0", rev = "bebc337f7c5467ec7cb36ef5f7d4f79e691a1f98" }
+eez-control-rpc   = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
+eez-payload-codec = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
+eez-primitives    = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d", features = ["revm"] }
+eez-proof-signer  = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
+eez-protocol      = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
+eez-prover        = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
+eez-prover-client = { git = "https://github.com/eez-association/eez-rollup0", rev = "1ddd8a667e795ef008967ba5d3fef6eea2349e1d" }
 
 # The EVM the signer runs.
 eez-prover-evm = { path = "crates/eez-prover-evm" }

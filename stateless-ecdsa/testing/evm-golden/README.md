@@ -13,10 +13,10 @@ and eez-rollup0's node EVM (`crates/eez-evm`), which reads this file through its
 cargo test -p eez-prover-evm --test golden
 ```
 
-The scenarios cover native `0x76` mints (commit, revert rollback, overflow),
-fee collection (positive, zero base fee, a self-destructing collector), mixed
-system and user nonce chains, EIP-2935 history, contract creation, logs,
-access lists and EIP-7702 delegation. The state root is computed over the full
+The scenarios cover native `0x45` mints (commit, revert rollback, overflow),
+fee collection (positive, zero base fee, a self-destructing collector), ordinary
+nonce chains followed by native deliveries, EIP-2935 history, contract creation,
+logs, access lists and EIP-7702 delegation. The state root is computed over the full
 post-state, so any difference in touched, created or deleted accounts shows up.
 
 Only this crate records them. `base-genesis.json` is eez-rollup0's L2 genesis
