@@ -18,13 +18,13 @@ alloy-rlp              = { version = "0.3", features = ["derive"] }
 alloy-rpc-types-debug = { version = "=2.5.0", default-features = false }
 alloy-rpc-types-engine = { version = "2", default-features = false }
 async-trait        = "0.1"
-eez-composer = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-driver = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-engine = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-evm = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-follower = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-primitives = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
-eez-proof-signer = { git = "https://github.com/eez-association/eez-rollup0", rev = "d7e2b505356790064c3666f8b9f3db8ff62a2632" }
+eez-composer = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-driver = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-engine = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-evm = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-follower = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-primitives = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
+eez-proof-signer = { git = "https://github.com/eez-association/eez-rollup0", rev = "ae22084e0dcd4f472c5e130269aab5ad5e4362c3" }
 evm2            = { git = "https://github.com/alloy-rs/evm2", rev = "66687c18b34d3bdbb899f5eb7605070615c03475", default-features = false, features = ["std", "block"] }
 eyre               = "0.6"
 lru                = "0.16.4"
